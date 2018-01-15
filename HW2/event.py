@@ -43,7 +43,7 @@ def find_events(ls_symbols, d_data):
             f_symprice_today = df_close[s_sym].ix[ldt_timestamps[i]]
             f_symprice_yest = df_close[s_sym].ix[ldt_timestamps[i - 1]]
 
-            if f_symprice_yest >= 9 and f_symprice_today < 9:
+            if f_symprice_yest >= 10 and f_symprice_today < 10:
                 df_events[s_sym].ix[ldt_timestamps[i]] = 1
 
     return df_events
@@ -62,7 +62,7 @@ def event_profiler(ldt_timestamps, symbols_list):
         d_data[s_key] = d_data[s_key].fillna(1.0)
 
     df_events = find_events(ls_symbols, d_data)
-    report_filename = "study8_" + symbols_list + ".pdf"
+    report_filename = "study10_" + symbols_list + ".pdf"
     print "Creating Study " + symbols_list
     ep.eventprofiler(df_events, d_data, i_lookback=20, i_lookforward=20,
                 s_filename=report_filename, b_market_neutral=True, b_errorbars=True,

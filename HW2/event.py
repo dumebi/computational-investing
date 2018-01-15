@@ -1,8 +1,3 @@
-## Computational Investing I
-## HW 2
-##
-## Author: alexcpsec
-
 import pandas as pd
 import numpy as np
 import math
@@ -29,7 +24,6 @@ nan = no information about any event.
 1 = status bit(positively confirms the event occurence)
 """
 
-
 def find_events(ls_symbols, d_data):
     df_close = d_data['actual_close']
     ts_market = df_close['SPY']
@@ -49,31 +43,31 @@ def find_events(ls_symbols, d_data):
             f_symprice_today = df_close[s_sym].ix[ldt_timestamps[i]]
             f_symprice_yest = df_close[s_sym].ix[ldt_timestamps[i - 1]]
 
-            if f_symprice_yest >= 6.00 and f_symprice_today < 6.00:
+            if f_symprice_yest >= 9 and f_symprice_today < 9:
                 df_events[s_sym].ix[ldt_timestamps[i]] = 1
 
     return df_events
-
 
 def event_profiler(ldt_timestamps, symbols_list):
     dataobj = da.DataAccess('Yahoo')
     ls_symbols = dataobj.get_symbols_from_list(symbols_list)
     ls_symbols.append('SPY')
 
-    ls_keys = ['close', 'actual_close']
+    ls_keys = ['close','actual_close']
     ldf_data = dataobj.get_data(ldt_timestamps, ls_symbols, ls_keys)
     d_data = dict(zip(ls_keys, ldf_data))
     for s_key in ls_keys:
-        d_data[s_key] = d_data[s_key].fillna(method='ffill')
-        d_data[s_key] = d_data[s_key].fillna(method='bfill')
+        d_data[s_key] = d_data[s_key].fillna(method = 'ffill')
+        d_data[s_key] = d_data[s_key].fillna(method = 'bfill')
         d_data[s_key] = d_data[s_key].fillna(1.0)
 
     df_events = find_events(ls_symbols, d_data)
-    report_filename = "hw2_event_study6_" + symbols_list + ".pdf"
+    report_filename = "study8_" + symbols_list + ".pdf"
     print "Creating Study " + symbols_list
     ep.eventprofiler(df_events, d_data, i_lookback=20, i_lookforward=20,
-                     s_filename=report_filename, b_market_neutral=True, b_errorbars=True,
-                     s_market_sym='SPY')
+                s_filename=report_filename, b_market_neutral=True, b_errorbars=True,
+                s_market_sym='SPY')
+
 
 
 if __name__ == '__main__':
@@ -82,7 +76,6 @@ if __name__ == '__main__':
     ldt_timestamps = du.getNYSEdays(dt_start, dt_end, dt.timedelta(hours=16))
 
     ## Starting up with SP500 2008
-    event_profiler(ldt_timestamps, 'sp5002008')
+    event_profiler(ldt_timestamps, 'SP5002012')
 
     ## Doing the SP500 2012
-    event_profiler(ldt_timestamps, 'sp5002012')
